@@ -1,5 +1,9 @@
 import Vue from 'vue/dist/vue.js'
 import Web from './Web.vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+
+Vue.use(ElementUI);
 
 
  
@@ -8,8 +12,7 @@ var vm = new Vue({
     data:{
         msg:'123'
     }, 
-    render: function(h) {
-        return h(Web)
+    render: h => h(Web)
     }
 
-})
+)
