@@ -3,7 +3,7 @@
 <div class="lunbo">
   <el-carousel :interval="3000" type="card" height="220px">
     <el-carousel-item v-for="item in imgs" :key="item.src">
-      <h3 class="medium"><img :src="item.src"></h3>
+      <h3 class="medium"><img :src="item.src" @click="myload"></h3>
     </el-carousel-item>
   </el-carousel>
 </div>
@@ -23,6 +23,11 @@ export default{
 
             ]
         }
+    },
+    methods:{
+      myload(){
+        console.log('ok')
+      }
     }
 }
 
@@ -47,5 +52,8 @@ export default{
     width:120%;
     
    
+  }
+  .lunbo{
+    background-color: #001935;
   }
 </style>
