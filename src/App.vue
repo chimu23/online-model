@@ -4,9 +4,10 @@
 <wheader></wheader>
 
     <!-- 中间显示区域 -->
-       <test2></test2>
-       <masterlink></masterlink>
-         <!-- <button @click="pas">点我点我</button> -->
+       <!-- <test2></test2>
+       <masterlink></masterlink> -->
+       <router-view></router-view>
+     <!-- <play></play> -->
        <!-- <myvideo  ref="child1" v-show="flag"></myvideo> -->
     
 <!-- 底部脚板 -->
@@ -17,17 +18,17 @@
 
 <script>
 import wheader from './components/header.vue'
-import test2 from './test2.vue'
-import masterlink from './components/masterlink.vue'
-import myvideo from './components/video.vue'
+import play from './components/play.vue'
+// import myvideo from './components/video.vue'
 import whfooter from './components/whfooter.vue'
+
     export default {
       data(){
         return { 
-          flag :false
+          // flag :false
           }
       },
-        components: {test2,wheader,masterlink,myvideo,whfooter},
+        components: {wheader,whfooter,play},
         methods:{
           // pas(){
           //   this.flag=true;

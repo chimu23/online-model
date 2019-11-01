@@ -10,7 +10,17 @@
   </el-tabs>
 				
 		
-            <router-view></router-view>
+              <div class="list">
+ <ul >
+
+
+<li  v-for="item in list" :key="item.src"><div><router-link :to="'/showinfo/'+item.id"><img :src="item.img_url" class="imgs"></router-link><span>{{item.title}}</span></div> </li>
+
+
+ </ul>
+
+
+  </div>
   </div>
 </template>
 
@@ -18,16 +28,40 @@
  export default {
     data() {
       return {
-        activeName: 'recommend'
+        activeName: 'recommend',
+        list:[]
+
       };
+    },
+    mounted:function(){
+       this.getdata("recommend")
     },
     methods: {
       handleClick(tab, event) {
         // console.log(tab.name);
        
-        this.$router.push("/"+tab.name);
+        // this.$router.push("/"+tab.name);
+        this.getdata(tab.name)
      
       },
+      getdata(type){
+        this.list=[]
+            this.axios.get('http://localhost:8080/static/total.json').then((response)=>{
+              if(type=="recommend"){
+                  this.list= response.data.message.filter((item,index) => {
+                   return item.id<15})
+              }
+              response.data.message.forEach(item => {
+                if(item.type==type){
+                  this.list.push(item)
+                }
+                
+              });
+         
+            }).catch((response)=>{
+                console.log(response)
+            })
+        },
 
     }
   };
@@ -61,4 +95,25 @@
     padding-top:10px;
 
 }
+.list ul{
+  width:1000px;
+  height:auto;
+  margin-left: 90px;
+  font-size: 15px;
+  color: #CCD1D6;
+    
+  }
+  .list li{
+    list-style: none;
+    float: left;
+   width: 150px;
+   height: 250px;
+   margin:15px 20px;
+   
+  }
+   .list li img{
+     max-width: 150px;
+     height: 210px !important;
+     margin-bottom: 10px;
+   }
 </style>
