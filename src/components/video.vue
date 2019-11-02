@@ -47,8 +47,10 @@
         });
         },
         loadvideo(src){
-            this.btnflag=true,
-               this.videoflag=true
+            // this.myPlayer.ended()
+            this.btnflag=true
+               this.videoflag=true          
+               this.myPlayer.type="application/x-mpegURL"
              this.myPlayer.src(src);
              this.myPlayer.play()
             

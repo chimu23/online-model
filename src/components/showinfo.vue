@@ -1,10 +1,10 @@
 <template>
   <div class="showinfo">
-<div id="d1"><div><p>我的英雄学院 第四季</p><p>2019-12-07 17:30 新番 热血 战斗 漫画改 推荐</p></div><img src="https://ae01.alicdn.com/kf/Hacccaa1c8347468eaa94940c2723d60bM.jpg"></div>
+<div id="d1"><div><p>{{photolist.title}}</p><p>{{photolist.add_time}} &#12288 {{photolist.zhaiyao}}</p></div><img :src="photolist.img_url"></div>
 <div id="d2"><div>
    <p>简介</p>
     <el-divider></el-divider>
-<p>大部分的人类，在这个时代里都拥有名为「个性」的力量，但有力量之人却不一定都属于正义的一方。只要邪恶出现的地方，必定会有英雄挺身而出拯救众人。一名天生没有力量的少年 —— 绿谷出久从小就憧憬一位顶尖英雄，而他的梦想就是成为伟大的英雄，可是，没有力量的他能实现自己的梦想吗？虽然困难重重，少年却依旧不放弃，朝着自己的目标勇往前进！</p></div>
+<p>{{photolist.article}}</p></div>
  <el-rate
   v-model="value"
   disabled
@@ -17,7 +17,7 @@
 <div id="d3"> 
   <ul>
      <!-- <button @click="pas">点击播放</button> -->
-   <li v-for="(item,index) in list" :key="index"> <el-button type="danger" size="small" :src="item" @click="pas">危险按钮</el-button></li>
+   <li v-for="(item,index) in list" :key="index"> <el-button type="danger" size="small" :src="item" @click="pas($event)">第{{index+1}}集</el-button></li>
   
    </ul>
 </div>
@@ -33,43 +33,62 @@ import myvideo from './video.vue'
 export default {
      data(){
         return { 
-         //  id :this.$route.prams.id
+         myid :this.$route.params.id,
          flag:false,
              value: 3.7,
-             list:[] //暂时存放读取的视频集数
+             list:[], //暂时存放读取的视频集数
+             photolist:{} //存放该页对应的图片及介绍
           }
       },
       mounted:function(){
-         this.pas()
+         this. readMylist()
+         // this.pas()
+      },
+      created(){
+           this.readMyphoto()
       },
       methods:{
-           pas(){
-              console.log(this.$route.params.id)
-            //   this.flag=true;        
-            // this.$refs.childvideo.loadvideo('https://feifei.feifeizuida.com/20190929/18925_523713af/index.m3u8'); 
-            var now =''
-           this.axios.get('http://localhost:8080/static/resource.json').then((response)=>{
+           pas(e){
+          var mysrc=''
+         mysrc =e.target.parentNode.getAttribute("src")
+                console.log(mysrc)
+              this.flag=true;        
+            this.$refs.childvideo.loadvideo(mysrc); 
+        
+          
+            
+          },
+          readMyphoto(){
+             this.axios.get('http://localhost:8080/static/total.json').then((response)=>{
            response.data.message.forEach(item => {
-                   if( item.id ==1){
-                     now=item.src.toString()
-                   this.list =now.split(/\s/)
-                   }
-                  
-                  
-              
-           });
-             
-             
+                   if( item.id ==this.myid){
+                     this.photolist=item
                  
-                
-                
-             
-         console.log(this.list)
+                   } 
+           });     
+         console.log(this.photolist)
             }).catch((response)=>{
                 console.log(response)
             })
-            
+
+          
+          },
+          readMylist(){ //根据url的id在resource.json中查找正确的集数，传入list中交给页面渲染
+               var now =''
+           this.axios.get('http://localhost:8080/static/resource.json').then((response)=>{
+           response.data.message.forEach(item => {
+                   if( item.id ==this.myid){
+                     now=item.src.toString()
+                   this.list =now.split(/\s/)
+                   } 
+           });     
+         // console.log(this.list)
+            }).catch((response)=>{
+                console.log(response)
+            })
+
           }
+
       },
    components: {myvideo},
 }
@@ -93,7 +112,7 @@ li{
    margin-left: 70px;
    width: 40%;
    height: 620px;
-   border: 1px solid red;
+   /* border: 1px solid red; */
    background-color: #0D253F;
       align-content: center;
   
@@ -103,7 +122,8 @@ img{
    margin: auto;
    border: 18px solid #001935;
    border-radius: 5px;
-   width: 72%
+   width: 72%;
+   max-height: 80%;
 }
 #d1 div:nth-child(1){
   
@@ -122,7 +142,7 @@ img{
    width: 40%;
    margin-right: 60px;
       height: 620px;
-   border: 1px solid red;
+   /* border: 1px solid red; */
    background-color: #0D253F;
       align-content: center;
 
@@ -147,23 +167,34 @@ img{
 .el-button{
    display: flex;
    float: left;
-   margin: 5px;
-  font-size:17px;
+    margin: 5px; 
+  /* font-size:17px;
   height: 45px;
-  width:120px;
+  width:120px;  */
+}
+.el-button span{
+   width: 200%
 }
 #d3{
-   width: 100%;
-   border: 1px solid red;
+   position: relative;
+   width: 84.4%;
+   /* border: 1px solid red; */
    height: 200px;
-   margin-top: 10px;
+   margin-top: -16px;
+   /* padding-left: 60px; */
+   margin-left: 70px;
+   padding-top: 20px;
    background-color: #0D253F;
 
 }
+#d3 button{
+   width: 64px;
+   margin: 5px;
+};
 .el-rate{
    position: relative;
    margin-top: 30px;
-   margin-left: 30px;
+   margin-left: 40px;
 }
 #myvideo{
    position: absolute;
