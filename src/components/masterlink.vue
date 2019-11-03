@@ -11,15 +11,19 @@
 				
 		
               <div class="list">
- <ul >
+ <ul  class="phlist">
 
 
-<li  v-for="item in list" :key="item.src"><div><router-link :to="'/showinfo/'+item.id"><img :src="item.img_url" class="imgs"></router-link><span>{{item.title}}</span></div> </li>
+<li v-for="item in list" :key="item.src"><div><router-link :to="'/showinfo/'+item.id"><img :src="item.img_url" class="imgs"></router-link><span>{{item.title}}</span></div> </li>
 
 
  </ul>
 
-
+<el-pagination
+  background
+  layout="prev, pager, next"
+  :total="100">
+</el-pagination>
   </div>
   </div>
 </template>
@@ -103,7 +107,7 @@
   color: #CCD1D6;
     
   }
-  .list li{
+  .list .phlist li{
     list-style: none;
     float: left;
    width: 150px;
@@ -116,4 +120,22 @@
      height: 210px !important;
      margin-bottom: 10px;
    }
+ .el-pager{
+   position: relative;
+   /* width: 200px !important; */
+   bottom: -830px;
+    left: -765px;
+ } 
+ .btn-prev{
+    position: relative;
+   /* width: 200px !important; */
+   bottom: -830px;
+    left: -680px; 
+ } 
+  .btn-next{
+    position: relative;
+   /* width: 200px !important; */
+   bottom: -830px;
+    left: -1440px; 
+ } 
 </style>

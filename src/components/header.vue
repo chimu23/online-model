@@ -6,15 +6,17 @@
   v-model="state"
   :fetch-suggestions="querySearchAsync"
   placeholder="请输入内容"
+  ref="placeword"
   @select="handleSelect"  class="myserach"
 ></el-autocomplete>
-<el-button type="primary" icon="el-icon-search">搜索</el-button>
+<el-button type="primary" icon="el-icon-search" @click="searcfor">搜索</el-button>
 <div class="lineborder">欢迎使用OnLineSee，祝您生活愉快~</div>
 
   </div>
 </template>
 
 <script>
+import { rejects } from 'assert';
  export default {
     data() {
       return {
@@ -51,6 +53,45 @@
       },
       handleSelect(item) {
         console.log(item);
+      },
+      searcfor(){  //判断json中是否存有搜索影片
+      // console.log( this.$refs.placeword.value) 
+            var flag =false
+           var word = this.$refs.placeword.value
+
+          this.axios.get('http://localhost:8080/static/total.json').then((response)=>{
+           response.data.message.forEach(item => {
+                   if( item.title !==word){
+                      
+      this.$notify({
+          title: '警告',
+          message: '暂无收录该影片，请观看其他影片',
+          type: 'warning'
+        })
+                        // this.$router.push({ path:'/two.html'})
+                    //异步执行，先执行了外边的console，再执行promise                    
+                   }else{
+                   alert('成功')
+                   this.$router.push({ path:'/two.html'})
+                   }
+                   
+                  //  } else{  flag =true}  if(flag) {console.log('没找到')}
+           });   
+      
+            }).catch((response)=>{
+                console.log(response)
+            })
+          // console.log(flag)
+
+        
+//         if(flag){
+//  this.$notify({
+//           title: '警告',
+//           message: '暂无收录该影片，请观看其他影片',
+//           type: 'warning'
+//         })
+//         }
+       
       }
     },
     mounted() {

@@ -51,7 +51,7 @@ export default {
            pas(e){
           var mysrc=''
          mysrc =e.target.parentNode.getAttribute("src")
-                console.log(mysrc)
+               //  console.log(mysrc)
               this.flag=true;        
             this.$refs.childvideo.loadvideo(mysrc); 
         
