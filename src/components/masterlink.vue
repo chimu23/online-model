@@ -22,7 +22,7 @@
 <el-pagination
   background
   layout="prev, pager, next"
-  :total="100">
+  :total="pagenumber" @current-change="showpage"   :current-page.sync="currentPage" >
 </el-pagination>
   </div>
   </div>
@@ -33,7 +33,10 @@
     data() {
       return {
         activeName: 'recommend',
-        list:[]
+        list:[],
+        currentPage: 1,
+        mytype:'recommend',
+        pagenumber:300, //当前应该有多少页
 
       };
     },
@@ -43,17 +46,27 @@
     methods: {
       handleClick(tab, event) {
         // console.log(tab.name);
-       
+         this.currentPage=1
         // this.$router.push("/"+tab.name);
+        
+        this.mytype=tab.name
         this.getdata(tab.name)
      
       },
       getdata(type){
         this.list=[]
+        var checkpage =this.currentPage
+        var prev =checkpage-1
+        // var next =checkpage+1
+        console.log(prev*15)
             this.axios.get('http://localhost:8080/static/total.json').then((response)=>{
+              
               if(type=="recommend"){
+                this.pagenumber=parseInt(response.data.rpage) //返回总页数
                   this.list= response.data.message.filter((item,index) => {
-                   return item.id<15})
+                    // console.log(this.currentPage)
+                   
+                   return index<=(checkpage*15) &&index>(prev*15)}) //根据index判断取回的数据，建立各个json分别存数据
               }
               response.data.message.forEach(item => {
                 if(item.type==type){
@@ -66,7 +79,14 @@
                 console.log(response)
             })
         },
+showpage(val){
 
+  //  console.log(`当前页: ${val}`);
+   this.currentPage=val;
+  //  console.log(this.mytype)
+   this.getdata(this.mytype)
+
+}
     }
   };
 </script>
